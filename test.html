@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    canvas {
+      background-color: #999;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="500" height="400"></canvas>
+  <div>
+    x
+    <input type="number" value="0" min="1" onchange="x=parseInt(this.value)" />
+  </div>
+  <div>
+    vx
+    <input type="number" value="1" min="1" onchange="vx=parseInt(this.value)" />
+  </div>
+  <div>
+    h
+    <input type="number" min="1" value="300" onchange="h=parseInt(this.value)" />
+  </div>
+  <div>
+    g
+    <input type="number" value="-1" onchange="g=parseInt(this.value)" />
+  </div>
+  <div><button onclick="loop=!loop">play</button></div>
+</body>
+<script>
+  let canvas = document.querySelector("canvas");
+  let ctx = canvas.getContext("2d");
+  let x = 0; // 抛出x位置
+  let vx = 1; // 水平速度
+  let y = 0; // y位置
+  let h = 300;
+  let g = -1;
+  let t = -Math.sqrt(Math.abs(h / g));
+
+  let obj = {
+    x,
+    y,
+    t
+  };
+  let loop = true;
+
+  function draw() {
+    ctx.clearRect(0, 0, 500, 400);
+    obj.x += vx;
+    obj.t += 0.2;
+    obj.y = 400 - Math.pow(obj.t, 2) * g - h;
+    ctx.beginPath();
+    ctx.arc(obj.x, obj.y, 5, 0, Math.PI * 2, true);
+    ctx.fill();
+    if (obj.x > 500 || obj.y > 400) {
+      console.log(obj.t);
+      obj = {
+        x,
+        y,
+        t: -Math.sqrt(Math.abs(h / g))
+      };
+    }
+    if (loop) {
+      window.requestAnimationFrame(draw);
+    }
+  }
+  draw();
+</script>
+
+</html>
